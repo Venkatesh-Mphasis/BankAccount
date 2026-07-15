@@ -1,0 +1,702 @@
+***********************************************************************
+* BMS MAPSET: BACMAPS - BUSINESS BANKING ACCOUNT CREATION PORTAL      *
+* CONTAINS:  BACMENU - MAIN DASHBOARD / PORTAL MENU                   *
+*            BACAPP1 - APPLICATION PAGE 1: BUSINESS IDENTIFICATION    *
+*            BACAPP2 - APPLICATION PAGE 2: ADDRESS & CONTACT            *
+*            BACAPP3 - APPLICATION PAGE 3: PRODUCT & KYC              *
+*            BACAPP4 - APPLICATION PAGE 4: AUTHORIZED SIGNATORY         *
+*            BACREVU - REVIEW AND SUBMIT SUMMARY                      *
+*            BACCONF - SUBMISSION CONFIRMATION                        *
+*            BACINQ  - APPLICATION INQUIRY                          *
+*            BACAPPR - CHECKER APPROVAL / REJECTION                 *
+***********************************************************************
+BACMAPS  DFHMSD TYPE=&SYSPARM,                                        X
+               LANG=COBOL,                                             X
+               MODE=INOUT,                                             X
+               CTRL=FREEKB,                                            X
+               STORAGE=AUTO,                                           X
+               TIOAPFX=YES
+***********************************************************************
+* MAP: BACMENU - MAIN DASHBOARD / PORTAL MENU                         *
+* TRANSACTION: BA01 (BACONL01)                                       *
+***********************************************************************
+BACMENU  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=50,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='BUSINESS BANKING - ACCOUNT CREATION PORTAL'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA01'
+*
+         DFHMDF POS=(3,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='1. NEW BUSINESS ACCOUNT APPLICATION'
+         DFHMDF POS=(4,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='2. PENDING APPLICATIONS INQUIRY'
+         DFHMDF POS=(5,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='3. APPROVE / REJECT APPLICATION'
+         DFHMDF POS=(6,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='4. OPENED ACCOUNTS INQUIRY'
+         DFHMDF POS=(7,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='5. EXIT PORTAL'
+*
+         DFHMDF POS=(10,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ENTER OPTION: '
+MNOPT    DFHMDF POS=(10,16),LENGTH=1,                                  X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(10,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  ENTER=SELECT'
+*
+MNMSG    DFHMDF POS=(24,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP,BRT)
+***********************************************************************
+* MAP: BACAPP1 - PAGE 1: BUSINESS IDENTIFICATION                      *
+* TRANSACTION: BA01                                                   *
+***********************************************************************
+BACAPP1  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=50,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='BUSINESS ACCOUNT APPLICATION - PAGE 1 IDENTIFICATION'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA01'
+*
+         DFHMDF POS=(3,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='BUSINESS NAME:'
+B1BUSNAM DFHMDF POS=(3,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(3,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(4,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRADE NAME:  '
+B1TRDNAM DFHMDF POS=(4,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(4,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(5,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='REG NO:      '
+B1REGNO  DFHMDF POS=(5,16),LENGTH=20,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(5,37),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(6,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TAX ID:      '
+B1TAXID  DFHMDF POS=(6,16),LENGTH=15,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(6,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='INCORP DATE: '
+B1INCDAT DFHMDF POS=(7,16),LENGTH=10,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(7,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(8,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='BUS TYPE:    '
+B1BUSTYP DFHMDF POS=(8,16),LENGTH=2,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(8,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(9,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='INDUSTRY CD: '
+B1INDCDE DFHMDF POS=(9,16),LENGTH=6,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(9,23),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(10,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ANN REVENUE: '
+B1ANNREV DFHMDF POS=(10,16),LENGTH=15,                                 X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(10,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(11,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='EMPLOYEES:   '
+B1EMPCNT DFHMDF POS=(11,16),LENGTH=6,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(11,23),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(12,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PHONE:       '
+B1PHONE  DFHMDF POS=(12,16),LENGTH=15,                                 X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(12,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(13,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='EMAIL:       '
+B1EMAIL  DFHMDF POS=(13,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(13,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  PF7=BACK  PF8=NEXT'
+*
+B1MSG    DFHMDF POS=(24,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP,BRT)
+***********************************************************************
+* MAP: BACAPP2 - PAGE 2: ADDRESS & CONTACT                          *
+* TRANSACTION: BA01                                                   *
+***********************************************************************
+BACAPP2  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=50,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='BUSINESS ACCOUNT APPLICATION - PAGE 2 ADDRESS'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA01'
+*
+         DFHMDF POS=(3,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ADDRESS 1:   '
+B2ADDRL1 DFHMDF POS=(3,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(3,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(4,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ADDRESS 2:   '
+B2ADDRL2 DFHMDF POS=(4,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(4,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(5,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CITY:        '
+B2CITY   DFHMDF POS=(5,16),LENGTH=25,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(5,42),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(6,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='STATE:       '
+B2STATE  DFHMDF POS=(6,16),LENGTH=2,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(6,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='COUNTRY:     '
+B2COUNTRY DFHMDF POS=(7,16),LENGTH=3,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(7,20),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(8,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ZIP CODE:    '
+B2ZIP    DFHMDF POS=(8,16),LENGTH=10,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(8,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(10,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CONTACT NAME:'
+B2CONNAM DFHMDF POS=(10,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(10,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(11,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CONT PHONE:  '
+B2CONPHN DFHMDF POS=(11,16),LENGTH=15,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(11,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(12,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CONT EMAIL:  '
+B2CONEML DFHMDF POS=(12,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(12,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  PF7=BACK  PF8=NEXT'
+*
+B2MSG    DFHMDF POS=(24,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP,BRT)
+***********************************************************************
+* MAP: BACAPP3 - PAGE 3: PRODUCT & KYC / COMPLIANCE                 *
+* TRANSACTION: BA01                                                   *
+***********************************************************************
+BACAPP3  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=50,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='BUSINESS ACCOUNT APPLICATION - PAGE 3 KYC'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA01'
+*
+         DFHMDF POS=(3,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ACCT TYPE:   '
+B3ACCTYP DFHMDF POS=(3,16),LENGTH=2,                                    X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(3,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(4,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CURRENCY:    '
+B3CURNCY DFHMDF POS=(4,16),LENGTH=3,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(4,20),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(5,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='INIT DEPOSIT:'
+B3INITDP DFHMDF POS=(5,16),LENGTH=15,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(5,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(6,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='SOURCE FUND: '
+B3SRCFND DFHMDF POS=(6,16),LENGTH=30,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(6,47),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='RISK RATING: '
+B3RISKRT DFHMDF POS=(7,16),LENGTH=2,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(7,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(8,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PEP FLAG:    '
+B3PEPFLG DFHMDF POS=(8,16),LENGTH=1,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(8,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(9,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='SANCTIONS:   '
+B3SANFLG DFHMDF POS=(9,16),LENGTH=1,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(9,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(10,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='DOCS RECV:   '
+B3DOCREC DFHMDF POS=(10,16),LENGTH=1,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(10,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(11,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='BOARD RESOL: '
+B3BOARDRES DFHMDF POS=(11,16),LENGTH=1,                                 X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(11,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(12,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='UBO DECL:    '
+B3UBOFLG DFHMDF POS=(12,16),LENGTH=1,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(12,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(13,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='EXP TXN AMT: '
+B3EXPTXA DFHMDF POS=(13,16),LENGTH=15,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(13,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  PF7=BACK  PF8=NEXT'
+*
+B3MSG    DFHMDF POS=(24,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP,BRT)
+***********************************************************************
+* MAP: BACAPP4 - PAGE 4: AUTHORIZED SIGNATORY / UBO                 *
+* TRANSACTION: BA01                                                   *
+***********************************************************************
+BACAPP4  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=50,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='BUSINESS ACCOUNT APPLICATION - PAGE 4 SIGNATORY'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA01'
+*
+         DFHMDF POS=(3,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='SIGNATORY NM:'
+B4SIGNAM DFHMDF POS=(3,16),LENGTH=50,                                   X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(3,67),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(4,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TITLE:       '
+B4SIGTTL DFHMDF POS=(4,16),LENGTH=30,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(4,47),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(5,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='DATE OF BIRTH:'
+B4SIGDOB DFHMDF POS=(5,16),LENGTH=10,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(5,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(6,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='SSN/TAX ID:  '
+B4SIGSSN DFHMDF POS=(6,16),LENGTH=11,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(6,28),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ADDRESS 1:   '
+B4SIGADR1 DFHMDF POS=(7,16),LENGTH=40,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(7,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(8,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CITY:        '
+B4SIGCTY DFHMDF POS=(8,16),LENGTH=25,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(8,42),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(9,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='STATE:       '
+B4SIGST  DFHMDF POS=(9,16),LENGTH=2,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(9,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(10,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ZIP CODE:    '
+B4SIGZIP DFHMDF POS=(10,16),LENGTH=10,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(10,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(11,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PHONE:       '
+B4SIGPHN DFHMDF POS=(11,16),LENGTH=15,                                  X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(11,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(12,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='OWNERSHIP %: '
+B4SIGOWN DFHMDF POS=(12,16),LENGTH=6,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(12,23),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(13,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TYPE A/B:    '
+B4SIGTYP DFHMDF POS=(13,16),LENGTH=1,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(13,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(14,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ID TYPE:     '
+B4SIGIDT DFHMDF POS=(14,16),LENGTH=10,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(14,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(15,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ID NUMBER:   '
+B4SIGIDN DFHMDF POS=(15,16),LENGTH=20,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(15,37),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  PF7=BACK  PF8=NEXT / REVIEW'
+*
+B4MSG    DFHMDF POS=(24,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP,BRT)
+***********************************************************************
+* MAP: BACREVU - REVIEW AND SUBMIT                                   *
+* TRANSACTION: BA01                                                   *
+***********************************************************************
+BACREVU  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='REVIEW AND SUBMIT APPLICATION'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA01'
+*
+         DFHMDF POS=(3,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='APP ID:      '
+RVAPPID  DFHMDF POS=(3,16),LENGTH=10,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(3,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(4,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='BUSINESS NAME:'
+RVBUSNAM DFHMDF POS=(4,16),LENGTH=40,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(4,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(5,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ACCT TYPE:   '
+RVACCTYP DFHMDF POS=(5,16),LENGTH=2,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(5,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(6,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='INIT DEPOSIT:'
+RVINITDP DFHMDF POS=(6,16),LENGTH=15,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(6,32),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='RISK RATING: '
+RVRISKRT DFHMDF POS=(7,16),LENGTH=2,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(7,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(8,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PEP FLAG:    '
+RVPEPFLG DFHMDF POS=(8,16),LENGTH=1,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(8,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(9,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='SANCTIONS:   '
+RVSANFLG DFHMDF POS=(9,16),LENGTH=1,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(9,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(10,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='DOCS RECV:   '
+RVDOCREC DFHMDF POS=(10,16),LENGTH=1,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(10,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(12,1),LENGTH=30,                                  X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='SUBMIT APPLICATION? (Y/N):'
+RVSUBAPP DFHMDF POS=(12,32),LENGTH=1,                                   X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(12,34),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  PF5=SUBMIT  PF7=EDIT'
+*
+RVMSG    DFHMDF POS=(24,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP,BRT)
+***********************************************************************
+* MAP: BACCONF - APPLICATION SUBMITTED CONFIRMATION                 *
+* TRANSACTION: BA01                                                   *
+***********************************************************************
+BACCONF  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='APPLICATION SUBMITTED'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA01'
+*
+         DFHMDF POS=(5,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='APP ID:      '
+CFAPPID  DFHMDF POS=(5,16),LENGTH=10,                                   X
+               ATTRB=(PROT,BRT)
+         DFHMDF POS=(5,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='STATUS:      '
+CFSTATUS DFHMDF POS=(7,16),LENGTH=2,                                    X
+               ATTRB=(PROT,BRT)
+         DFHMDF POS=(7,19),LENGTH=1,ATTRB=(ASKIP)
+*
+CFMSG    DFHMDF POS=(10,1),LENGTH=60,                                   X
+               ATTRB=(ASKIP,BRT)
+*
+         DFHMDF POS=(22,1),LENGTH=50,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  ENTER=RETURN TO MAIN MENU'
+***********************************************************************
+* MAP: BACINQ - APPLICATION / ACCOUNT INQUIRY                       *
+* TRANSACTION: BA02 (BACONL02)                                      *
+***********************************************************************
+BACINQ   DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='APPLICATION / ACCOUNT INQUIRY'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA02'
+*
+         DFHMDF POS=(3,1),LENGTH=20,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='SEARCH BY (A=APP/C=CUST):'
+IQKEY    DFHMDF POS=(3,28),LENGTH=1,                                    X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(3,30),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(4,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='KEY VALUE:   '
+IQVAL    DFHMDF POS=(4,16),LENGTH=10,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(4,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='APP ID:      '
+IQAPPID  DFHMDF POS=(7,16),LENGTH=10,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(7,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(8,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='BUSINESS NAME:'
+IQBUSNAM DFHMDF POS=(8,16),LENGTH=40,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(8,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(9,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='STATUS:      '
+IQSTATUS DFHMDF POS=(9,16),LENGTH=2,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(9,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(10,1),LENGTH=14,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ACCT TYPE:   '
+IQACCTYP DFHMDF POS=(10,16),LENGTH=2,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(10,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=50,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  ENTER=INQUIRE'
+*
+IQMSG    DFHMDF POS=(24,1),LENGTH=60,                                   X
+               ATTRB=(ASKIP,BRT)
+***********************************************************************
+* MAP: BACAPPR - CHECKER APPROVAL / REJECTION                       *
+* TRANSACTION: BA03 (BACAPPR)                                       *
+***********************************************************************
+BACAPPR  DFHMDI SIZE=(24,80),                                           X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+         DFHMDF POS=(1,1),LENGTH=40,                                   X
+               ATTRB=(ASKIP,BRT),                                      X
+               INITIAL='APPLICATION APPROVAL / REJECTION'
+         DFHMDF POS=(1,60),LENGTH=19,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='TRANSACTION: BA03'
+*
+         DFHMDF POS=(3,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='APP ID:      '
+APAPPID  DFHMDF POS=(3,16),LENGTH=10,                                   X
+               ATTRB=(UNPROT,BRT,IC)
+         DFHMDF POS=(3,27),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(4,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='BUSINESS NAME:'
+APBUSNAM DFHMDF POS=(4,16),LENGTH=40,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(4,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(5,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='STATUS:      '
+APSTATUS DFHMDF POS=(5,16),LENGTH=2,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(5,19),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(7,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CHECKER ID:  '
+APCHKR   DFHMDF POS=(7,16),LENGTH=8,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(7,25),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(8,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='ACTION A/R:  '
+APACT    DFHMDF POS=(8,16),LENGTH=1,                                    X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(8,18),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(9,1),LENGTH=14,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='REASON:      '
+APREASON DFHMDF POS=(9,16),LENGTH=40,                                   X
+               ATTRB=(UNPROT)
+         DFHMDF POS=(9,57),LENGTH=1,ATTRB=(ASKIP)
+*
+         DFHMDF POS=(22,1),LENGTH=60,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='PF3=EXIT  PF5=UPDATE  ENTER=FETCH'
+*
+APMSG    DFHMDF POS=(24,1),LENGTH=60,                                   X
+               ATTRB=(ASKIP,BRT)
+*
+         DFHMSD TYPE=FINAL
+         END

@@ -1,0 +1,6 @@
+DEFINE CLUSTER (NAME(HLQ.BANK.VSAM.BACSIG) -
+       CISZ(4096) -
+       TRK(3 3) -
+       RECORDSIZE(452 452) -
+       KEYS(10 0) -
+       INDEXED)

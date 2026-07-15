@@ -1,0 +1,15 @@
+# Local build artifacts
+LOCAL/BIN/
+*.so
+*.o
+*.i?
+
+# Local data / output generated at runtime
+LOCAL/DATA/*
+!LOCAL/DATA/BACREQ.dat
+LOCAL/OUTPUT/*
+
+# Editor / OS files
+*.swp
+*.tmp
+.DS_Store
