@@ -65,4 +65,14 @@
            05  WS-APP-ACCOUNT-NUMBER      PIC X(12).
            05  WS-APP-BRANCH-CODE         PIC X(06).
            05  WS-APP-REJECTION-REASON    PIC X(100).
-           05  FILLER                     PIC X(50).
+           05  WS-APP-CARD-REQUESTED     PIC X(01).
+               88  WS-APP-CRD-REQUESTED   VALUE 'Y'.
+           05  WS-APP-CARD-TYPE          PIC X(02).
+               88  WS-APP-CRD-DEBIT       VALUE 'DC'.
+               88  WS-APP-CRD-CREDIT      VALUE 'CC'.
+               88  WS-APP-CRD-PREPAID     VALUE 'PC'.
+           05  WS-APP-CARD-DAILY-LIMIT   PIC S9(07)V99 COMP-3.
+           05  WS-APP-CARD-ATM-LIMIT     PIC S9(07)V99 COMP-3.
+           05  WS-APP-CARD-MONTHLY-LIMIT PIC S9(09)V99 COMP-3.
+           05  WS-APP-CARD-EMBOSS-NAME   PIC X(30).
+           05  FILLER                     PIC X(05).

@@ -13,6 +13,7 @@ It covers all of the real-world controls found in production banking systems:
 * Risk rating
 * Maker-checker workflow
 * Account opening through batch
+* Debit / prepaid card request and issuance linked to the opened account
 
 ## 2. Business Requirements
 
@@ -36,6 +37,7 @@ It covers all of the real-world controls found in production banking systems:
 * Expected monthly transaction volume and amount
 * Source of funds
 * Initial deposit amount
+* Optional debit card request, card type, daily/ATM/monthly limits, and emboss name
 
 ### 2.4 Authorized Signatories and Beneficial Owners
 * Name, title, date of birth, SSN / national ID
@@ -60,6 +62,7 @@ It covers all of the real-world controls found in production banking systems:
 * Approved applications are processed by a nightly batch
 * Customer master and account master records are created
 * Account number generation with branch, product, sequence, and check digit
+* Linked debit / prepaid card generated with 16-digit PAN, check digit, expiry, limits, and plastic lifecycle when requested
 * Application status updated to Opened
 
 ## 3. Technical Requirements
@@ -68,17 +71,17 @@ It covers all of the real-world controls found in production banking systems:
 * Transaction `BA01` - account creation and submission
 * Multi-screen BMS mapset `BACMAPS`
 * COMMAREA state machine to retain data across screens
-* DB2 inserts for application, signatory, document, and audit
+* DB2 inserts for application, signatory, document, audit, and card request
 
 ### 3.2 Batch
 * Nightly `BACBAT01` job processes submitted and approved applications
 * DB2 cursor `FOR UPDATE OF` for row locking
-* Inserts into `TB_BAC_CUSTOMER` and `TB_BAC_ACCOUNT`
+* Inserts into `TB_BAC_CUSTOMER`, `TB_BAC_ACCOUNT`, and `TB_BAC_CARD`
 * Updates `TB_BAC_APPLICATION` to Opened
-* Writes audit trail and report
+* Writes audit trail and account/card reports
 
 ### 3.3 Data
-* DB2 tables: Application, Customer, Signatory, Account, Document, Audit
+* DB2 tables: Application, Customer, Signatory, Account, Card, Document, Audit
 * DB2 sequences for surrogate IDs
 * VSAM KSDS definitions for legacy / settlement interfaces
 

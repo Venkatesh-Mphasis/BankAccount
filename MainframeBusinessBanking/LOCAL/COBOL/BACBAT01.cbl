@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID.    BACBAT01.
       ******************************************************************
-      * LOCAL GNUCOBOL BATCH - ACCOUNT OPENING                         *
-      * PROCESSES SUBMITTED/APPROVED APPLICATIONS FROM DATA/BACAPP       *
-      * CREATES CUSTOMER/ACCOUNT MASTERS AND ACCOUNT_OPEN_RPT.txt        *
+      * LOCAL GNUCOBOL BATCH - ACCOUNT OPENING + DEBIT CARD ISSUE    *
+      * PROCESSES SUBMITTED/APPROVED APPLICATIONS FROM DATA/BACAPP     *
+      * CREATES CUSTOMER, ACCOUNT AND CARD MASTERS                     *
       * RUN FROM: LOCAL/                                               *
       ******************************************************************
        ENVIRONMENT DIVISION.
@@ -29,10 +29,20 @@
                ORGANIZATION IS SEQUENTIAL
                FILE STATUS IS WS-BACACC-STATUS.
 
+           SELECT BACCARD-FILE
+               ASSIGN TO "DATA/BACCARD"
+               ORGANIZATION IS SEQUENTIAL
+               FILE STATUS IS WS-BACCARD-STATUS.
+
            SELECT BACRPT-FILE
                ASSIGN TO "OUTPUT/ACCOUNT_OPEN_RPT.txt"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-BACRPT-STATUS.
+
+           SELECT BACCARD-RPT-FILE
+               ASSIGN TO "OUTPUT/CARD_ISSUE_RPT.txt"
+               ORGANIZATION IS LINE SEQUENTIAL
+               FILE STATUS IS WS-BACCARD-RPT-STATUS.
 
        DATA DIVISION.
        FILE SECTION.
@@ -52,25 +62,37 @@
            RECORD CONTAINS 194 CHARACTERS.
        01  BACACC-REC                     PIC X(194).
 
+       FD  BACCARD-FILE
+           RECORD CONTAINS 261 CHARACTERS.
+       01  BACCARD-REC                    PIC X(261).
+
        FD  BACRPT-FILE.
        01  BACRPT-REC                     PIC X(120).
+
+       FD  BACCARD-RPT-FILE.
+       01  BACCARD-RPT-REC                PIC X(132).
 
        WORKING-STORAGE SECTION.
            COPY CPYBAC01.
            COPY CPYBAC02.
            COPY CPYBAC04.
+           COPY CPYBAC07.
            COPY CPYCOM01.
 
        01  WS-BACAPP-STATUS              PIC X(02).
        01  WS-BACAPP-UPD-STATUS          PIC X(02).
        01  WS-BACCUST-STATUS             PIC X(02).
        01  WS-BACACC-STATUS              PIC X(02).
+       01  WS-BACCARD-STATUS            PIC X(02).
        01  WS-BACRPT-STATUS              PIC X(02).
+       01  WS-BACCARD-RPT-STATUS         PIC X(02).
 
        01  WS-CUST-SEQ                   PIC 9(06) VALUE ZEROS.
        01  WS-ACC-SEQ                    PIC 9(05) VALUE ZEROS.
+       01  WS-CARD-SEQ                   PIC 9(03) VALUE ZEROS.
        01  WS-CUST-SEQ-STR               PIC 9(06).
        01  WS-ACC-SEQ-STR                PIC 9(05).
+       01  WS-CARD-SEQ-STR               PIC 9(03).
 
        01  WS-LD8                        PIC 9(08).
        01  WS-LT8                        PIC 9(08).
@@ -86,6 +108,13 @@
        01  WS-CHECK-SUM                 PIC 9(04).
        01  WS-DIGIT                     PIC 9(01).
        01  WS-I                         PIC 9(02).
+
+       01  WS-CARD-BASE                 PIC X(15).
+       01  WS-CARD-CHECK-DIGIT          PIC 9(01).
+       01  WS-CARD-CHECK-SUM            PIC 9(04).
+       01  WS-CARD-DGT                  PIC 9(01).
+       01  WS-CARD-K                    PIC 9(02).
+       01  WS-EXP-YEAR-NUM              PIC 9(04).
 
        01  WS-REPORT-LINE.
            05  FILLER                   PIC X(02) VALUE SPACES.
@@ -106,6 +135,26 @@
        01  WS-HEADER-LINE               PIC X(120) VALUE
            ' APP-ID     CUST-ID    ACCOUNT-NUM  BUSINESS-NAME'.
 
+       01  WS-CARD-RPT-LINE.
+           05  FILLER                   PIC X(02) VALUE SPACES.
+           05  CRPT-APP-ID              PIC X(10).
+           05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-ACCOUNT-NUM         PIC X(12).
+           05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-CARD-ID             PIC X(10).
+           05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-CARD-NUMBER         PIC X(16).
+           05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-STATUS              PIC X(02).
+           05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-PLASTIC             PIC X(02).
+           05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-DAILY-LIMIT         PIC ZZZ,ZZZ,ZZ9.99.
+           05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-EMBOSS-NAME         PIC X(30).
+
+       01  WS-CARD-HEADER-LINE        PIC X(132) VALUE SPACES.
+
        PROCEDURE DIVISION.
 
        0000-MAIN.
@@ -115,9 +164,18 @@
            OPEN OUTPUT BACAPP-UPDATED-FILE
            OPEN OUTPUT BACCUST-FILE
            OPEN OUTPUT BACACC-FILE
+           OPEN OUTPUT BACCARD-FILE
            OPEN OUTPUT BACRPT-FILE
+           OPEN OUTPUT BACCARD-RPT-FILE
 
            WRITE BACRPT-REC FROM WS-HEADER-LINE
+           STRING ' APP-ID     ACCT-NUM     CARD-ID    '
+                  'CARD-NUMBER       ST PL DAILY-LIMIT  '
+                  'EMBOSS-NAME'
+               DELIMITED BY SIZE
+               INTO WS-CARD-HEADER-LINE
+           END-STRING
+           WRITE BACCARD-RPT-REC FROM WS-CARD-HEADER-LINE
 
            SET WS-NOT-EOF TO TRUE
            PERFORM 2000-READ-NEXT-APP
@@ -127,11 +185,14 @@
            CLOSE BACAPP-UPDATED-FILE
            CLOSE BACCUST-FILE
            CLOSE BACACC-FILE
+           CLOSE BACCARD-FILE
            CLOSE BACRPT-FILE
+           CLOSE BACCARD-RPT-FILE
 
            DISPLAY 'BATCH ACCOUNT OPENING COMPLETE'
            DISPLAY 'APPLICATIONS READ:    ' WS-RECORDS-READ
            DISPLAY 'ACCOUNTS OPENED:      ' WS-RECORDS-WRITTEN
+           DISPLAY 'CARDS ISSUED:         ' WS-CARD-SEQ
            STOP RUN.
 
       ******************************************************************
@@ -151,7 +212,7 @@
            .
 
       ******************************************************************
-      * 3000-OPEN-ACCOUNT: CREATE CUSTOMER, ACCOUNT AND UPDATE APP     *
+      * 3000-OPEN-ACCOUNT: CREATE CUSTOMER, ACCOUNT, CARD AND UPDATE *
       ******************************************************************
        3000-OPEN-ACCOUNT.
            ADD 1 TO WS-ACC-SEQ
@@ -228,7 +289,7 @@
            MOVE 'BATCH01'               TO WS-APP-CHECKER-ID
            MOVE WS-LFTS                 TO WS-APP-UPDATED-TIMESTAMP
 
-      *    WRITE REPORT
+      *    WRITE ACCOUNT REPORT
            MOVE WS-APP-ID               TO RPT-APP-ID
            MOVE WS-CUST-ID              TO RPT-CUST-ID
            MOVE WS-ACCOUNT-NUM          TO RPT-ACCOUNT-NUM
@@ -237,6 +298,11 @@
            MOVE WS-APP-INITIAL-DEPOSIT  TO RPT-INITIAL-DEPOSIT
            MOVE 'OP'                    TO RPT-STATUS
            WRITE BACRPT-REC FROM WS-REPORT-LINE
+
+      *    ISSUE DEBIT CARD IF REQUESTED
+           IF WS-APP-CARD-REQUESTED = 'Y'
+               PERFORM 3200-ISSUE-DEBIT-CARD
+           END-IF
 
            ADD 1 TO WS-RECORDS-WRITTEN
            .
@@ -286,6 +352,101 @@
                DELIMITED BY SIZE
                INTO WS-ACCOUNT-NUM
            END-STRING
+           .
+
+      ******************************************************************
+      * 3200-ISSUE-DEBIT-CARD: BUILD CARD MASTER AND PRODUCE PLASTIC   *
+      ******************************************************************
+       3200-ISSUE-DEBIT-CARD.
+      *    PREPARE A CLEAN CARD RECORD
+           INITIALIZE WS-BAC-CARD-REC
+
+           ADD 1 TO WS-CARD-SEQ
+           MOVE WS-CARD-SEQ TO WS-CARD-SEQ-STR
+
+      *    GENERATE INTERNAL CARD ID
+           STRING 'CARD' WS-CARD-SEQ-STR
+               DELIMITED BY SIZE
+               INTO WS-CARD-ID
+           END-STRING
+
+      *    GENERATE 16 DIGIT PAN WITH CHECK DIGIT
+           STRING '400000' WS-BRANCH-PART WS-PROD-CODE WS-CARD-SEQ-STR
+               DELIMITED BY SIZE
+               INTO WS-CARD-BASE
+           END-STRING
+
+           MOVE ZEROS TO WS-CARD-CHECK-SUM
+           PERFORM VARYING WS-CARD-K FROM 1 BY 1
+                   UNTIL WS-CARD-K > 15
+               MOVE FUNCTION NUMVAL(WS-CARD-BASE(WS-CARD-K:1))
+                   TO WS-CARD-DGT
+               IF FUNCTION MOD(WS-CARD-K, 2) = 1
+                   MULTIPLY WS-CARD-DGT BY 2 GIVING WS-CARD-DGT
+               END-IF
+               IF WS-CARD-DGT > 9
+                   SUBTRACT 9 FROM WS-CARD-DGT
+               END-IF
+               ADD WS-CARD-DGT TO WS-CARD-CHECK-SUM
+           END-PERFORM
+
+           COMPUTE WS-CARD-CHECK-DIGIT =
+               10 - FUNCTION MOD(WS-CARD-CHECK-SUM, 10)
+           IF WS-CARD-CHECK-DIGIT = 10
+               MOVE 0 TO WS-CARD-CHECK-DIGIT
+           END-IF
+
+           STRING WS-CARD-BASE WS-CARD-CHECK-DIGIT
+               DELIMITED BY SIZE
+               INTO WS-CARD-NUMBER
+           END-STRING
+
+      *    EXPIRY DATE = TODAY + 3 YEARS
+           COMPUTE WS-EXP-YEAR-NUM =
+               FUNCTION NUMVAL(WS-LD8(1:4)) + 3
+           STRING WS-EXP-YEAR-NUM '-' WS-LD8(5:2) '-' WS-LD8(7:2)
+               DELIMITED BY SIZE
+               INTO WS-CARD-EXPIRY-DATE
+           END-STRING
+
+      *    POPULATE REMAINING CARD MASTER FIELDS
+           MOVE WS-APP-ID               TO WS-CARD-APP-ID
+           MOVE WS-ACCOUNT-NUM          TO WS-CARD-ACCOUNT-NUM
+           MOVE WS-CUST-ID              TO WS-CARD-CUST-ID
+           MOVE WS-APP-CARD-TYPE        TO WS-CARD-TYPE
+           MOVE 'IS'                    TO WS-CARD-STATUS
+           MOVE 'EM'                    TO WS-CARD-PLASTIC-STATUS
+           MOVE WS-APP-CARD-EMBOSS-NAME TO WS-CARD-EMBOSS-NAME
+           MOVE WS-LFD                  TO WS-CARD-ISSUE-DATE
+           MOVE WS-APP-CARD-DAILY-LIMIT TO WS-CARD-DAILY-LIMIT
+           MOVE WS-APP-CARD-ATM-LIMIT   TO WS-CARD-ATM-LIMIT
+           MOVE WS-APP-CARD-MONTHLY-LIMIT TO WS-CARD-MONTHLY-LIMIT
+           MOVE WS-APP-CARD-DAILY-LIMIT TO WS-CARD-AVAILABLE-LIMIT
+           MOVE '123'                   TO WS-CARD-CVV
+           MOVE 'M'                     TO WS-CARD-PIN-STATUS
+           MOVE 'I'                     TO WS-CARD-ACTIVATION-STATUS
+           MOVE 'PD'                    TO WS-CARD-DISPATCH-STATUS
+           MOVE 'BATCH01'               TO WS-CARD-MAKER-ID
+           MOVE 'BATCH01'               TO WS-CARD-CHECKER-ID
+           MOVE WS-LFTS                 TO WS-CARD-CREATED-TIMESTAMP
+           MOVE WS-LFTS                 TO WS-CARD-UPDATED-TIMESTAMP
+
+           WRITE BACCARD-REC FROM WS-BAC-CARD-REC
+           IF WS-BACCARD-STATUS NOT = '00'
+               DISPLAY 'BACCARD WRITE ERROR ' WS-BACCARD-STATUS
+               STOP RUN
+           END-IF
+
+      *    WRITE CARD ISSUE REPORT
+           MOVE WS-APP-ID               TO CRPT-APP-ID
+           MOVE WS-ACCOUNT-NUM          TO CRPT-ACCOUNT-NUM
+           MOVE WS-CARD-ID              TO CRPT-CARD-ID
+           MOVE WS-CARD-NUMBER          TO CRPT-CARD-NUMBER
+           MOVE WS-CARD-STATUS          TO CRPT-STATUS
+           MOVE WS-CARD-PLASTIC-STATUS  TO CRPT-PLASTIC
+           MOVE WS-CARD-DAILY-LIMIT     TO CRPT-DAILY-LIMIT
+           MOVE WS-CARD-EMBOSS-NAME     TO CRPT-EMBOSS-NAME
+           WRITE BACCARD-RPT-REC FROM WS-CARD-RPT-LINE
            .
 
       ******************************************************************

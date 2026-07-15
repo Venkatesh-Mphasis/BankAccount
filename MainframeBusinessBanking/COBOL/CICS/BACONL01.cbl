@@ -1076,6 +1076,13 @@
            MOVE CA-APP-PEP-FLAG       TO RVPEPFLGO
            MOVE CA-APP-SANCTIONS-FLAG TO RVSANFLGO
            MOVE CA-APP-DOCS-RECEIVED  TO RVDOCRECO
+           IF CA-APP-PEP-FLAG = 'Y' OR CA-APP-SANCTIONS-FLAG = 'Y'
+               MOVE 'N'               TO RVCRDREQO
+               MOVE 'NOT ELIGIBLE'    TO RVCRDTLO
+           ELSE
+               MOVE 'Y'               TO RVCRDREQO
+               MOVE 'DC / 2,500.00 DAILY' TO RVCRDTLO
+           END-IF
            MOVE 'N'                   TO RVSUBAPPO
            MOVE CA-MSG                TO RVMSGO
            EXEC CICS SEND
@@ -1105,7 +1112,9 @@
                 SANCTIONS_FLAG, DOCS_RECEIVED, BOARD_RESOLUTION,
                 UBO_DECLARATION, MAKER_ID, CHECKER_ID,
                 CREATED_TIMESTAMP, UPDATED_TIMESTAMP, ACCOUNT_NUMBER,
-                BRANCH_CODE, REJECTION_REASON)
+                BRANCH_CODE, REJECTION_REASON,
+                CARD_REQUESTED, CARD_TYPE, CARD_DAILY_LIMIT,
+                CARD_ATM_LIMIT, CARD_MONTHLY_LIMIT, CARD_EMBOSS_NAME)
                VALUES
                (:CA-APP-ID, :CA-APP-STATUS, :CA-APP-BUSINESS-NAME,
                 :CA-APP-TRADE-NAME, :CA-APP-REGISTRATION-NO,
@@ -1125,7 +1134,10 @@
                 :CA-APP-MAKER-ID, :CA-APP-CHECKER-ID,
                 :CA-APP-CREATED-TIMESTAMP, :CA-APP-UPDATED-TIMESTAMP,
                 :CA-APP-ACCOUNT-NUMBER, :CA-APP-BRANCH-CODE,
-                :CA-APP-REJECTION-REASON)
+                :CA-APP-REJECTION-REASON,
+                :CA-APP-CARD-REQUESTED, :CA-APP-CARD-TYPE,
+                :CA-APP-CARD-DAILY-LIMIT, :CA-APP-CARD-ATM-LIMIT,
+                :CA-APP-CARD-MONTHLY-LIMIT, :CA-APP-CARD-EMBOSS-NAME)
            END-EXEC
 
            IF SQLCODE = 0
@@ -1186,6 +1198,16 @@
                ELSE
                    MOVE 'SB' TO CA-APP-STATUS
                END-IF
+           END-IF
+
+      *    DEFAULT DEBIT CARD REQUEST FOR ELIGIBLE APPLICATIONS
+           IF CA-APP-STATUS NOT = 'RJ'
+               MOVE 'Y'                     TO CA-APP-CARD-REQUESTED
+               MOVE 'DC'                    TO CA-APP-CARD-TYPE
+               MOVE 2500.00               TO CA-APP-CARD-DAILY-LIMIT
+               MOVE 1000.00               TO CA-APP-CARD-ATM-LIMIT
+               MOVE 25000.00              TO CA-APP-CARD-MONTHLY-LIMIT
+               MOVE CA-APP-CONTACT-NAME   TO CA-APP-CARD-EMBOSS-NAME
            END-IF
            .
 
@@ -1275,7 +1297,16 @@
            IF CA-APP-STATUS = 'RJ'
                MOVE 'APPLICATION REJECTED - SEE AUDIT' TO CFMSGO
            ELSE
-               MOVE 'APPLICATION SUBMITTED SUCCESSFULLY' TO CFMSGO
+               IF CA-APP-CARD-REQUESTED = 'Y'
+                   STRING 'APP SUBMITTED - '
+                          CA-APP-CARD-TYPE
+                          ' CARD REQUESTED'
+                       DELIMITED BY SIZE
+                       INTO CFMSGO
+                   END-STRING
+               ELSE
+                   MOVE 'APPLICATION SUBMITTED SUCCESSFULLY' TO CFMSGO
+               END-IF
            END-IF
            EXEC CICS SEND
                MAP('BACCONF')

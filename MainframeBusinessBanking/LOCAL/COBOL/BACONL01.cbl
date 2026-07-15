@@ -179,6 +179,12 @@
            MOVE SPACES                     TO WS-APP-ACCOUNT-NUMBER
            MOVE 'BR0001'                   TO WS-APP-BRANCH-CODE
            MOVE SPACES                     TO WS-APP-REJECTION-REASON
+           MOVE 'Y'                        TO WS-APP-CARD-REQUESTED
+           MOVE 'DC'                       TO WS-APP-CARD-TYPE
+           MOVE 2500.00                    TO WS-APP-CARD-DAILY-LIMIT
+           MOVE 1000.00                    TO WS-APP-CARD-ATM-LIMIT
+           MOVE 25000.00                   TO WS-APP-CARD-MONTHLY-LIMIT
+           MOVE 'Sam Wilson / Riverfront'  TO WS-APP-CARD-EMBOSS-NAME
 
            OPEN EXTEND BACAPP-FILE
            IF WS-BACAPP-STATUS NOT = '00'
@@ -223,8 +229,12 @@
            WRITE BACSIG-REC FROM WS-BAC-SIGNATORY-REC
            CLOSE BACSIG-FILE
 
+           MOVE SPACES TO WS-RESP-TEXT
+           MOVE WS-APP-CARD-DAILY-LIMIT TO WS-EDIT-AMOUNT
            STRING 'APP CREATED: ' WS-APP-ID
                ' STATUS: ' WS-APP-STATUS
+               ' CARD: ' WS-APP-CARD-TYPE
+               ' DAILY LIMIT: ' WS-EDIT-AMOUNT
                ' BUSINESS: ' WS-APP-BUSINESS-NAME
                DELIMITED BY SIZE
                INTO WS-RESP-TEXT
@@ -295,6 +305,7 @@
                    NOT AT END
                        IF WS-APP-ID = REQ-KEY
                            SET WS-FOUND TO TRUE
+                           MOVE SPACES TO WS-RESP-TEXT
                            MOVE WS-APP-INITIAL-DEPOSIT TO WS-EDIT-AMOUNT
                            STRING 'INQUIRY APP: ' WS-APP-ID
                                   ' STATUS: ' WS-APP-STATUS

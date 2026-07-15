@@ -78,7 +78,13 @@
                10  CA-APP-ACCOUNT-NUMBER  PIC X(12).
                10  CA-APP-BRANCH-CODE     PIC X(06).
                10  CA-APP-REJECTION-REASON PIC X(100).
-               10  FILLER                 PIC X(50).
+               10  CA-APP-CARD-REQUESTED   PIC X(01).
+               10  CA-APP-CARD-TYPE        PIC X(02).
+               10  CA-APP-CARD-DAILY-LIMIT PIC S9(07)V99 COMP-3.
+               10  CA-APP-CARD-ATM-LIMIT   PIC S9(07)V99 COMP-3.
+               10  CA-APP-CARD-MONTHLY-LIMIT PIC S9(09)V99 COMP-3.
+               10  CA-APP-CARD-EMBOSS-NAME PIC X(30).
+               10  FILLER                  PIC X(05).
       *--- AUTHORIZED SIGNATORY / BENEFICIAL OWNER -------------------
            05  CA-SIGNATORY.
                10  CS-SIG-ID              PIC X(10).

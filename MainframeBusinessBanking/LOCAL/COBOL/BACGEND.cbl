@@ -131,6 +131,12 @@
            MOVE SPACES                   TO WS-APP-ACCOUNT-NUMBER
            MOVE 'BR0001'                 TO WS-APP-BRANCH-CODE
            MOVE SPACES                   TO WS-APP-REJECTION-REASON
+           MOVE 'Y'                      TO WS-APP-CARD-REQUESTED
+           MOVE 'DC'                     TO WS-APP-CARD-TYPE
+           MOVE 2500.00                  TO WS-APP-CARD-DAILY-LIMIT
+           MOVE 1000.00                  TO WS-APP-CARD-ATM-LIMIT
+           MOVE 25000.00                 TO WS-APP-CARD-MONTHLY-LIMIT
+           MOVE 'John Doe / Acme Mfg'    TO WS-APP-CARD-EMBOSS-NAME
            PERFORM 9100-WRITE-APP
 
       *    APP 1 SIGNATORY
@@ -199,6 +205,12 @@
            MOVE SPACES                     TO WS-APP-ACCOUNT-NUMBER
            MOVE 'BR0002'                   TO WS-APP-BRANCH-CODE
            MOVE SPACES                     TO WS-APP-REJECTION-REASON
+           MOVE 'Y'                        TO WS-APP-CARD-REQUESTED
+           MOVE 'DC'                       TO WS-APP-CARD-TYPE
+           MOVE 5000.00                    TO WS-APP-CARD-DAILY-LIMIT
+           MOVE 2000.00                  TO WS-APP-CARD-ATM-LIMIT
+           MOVE 50000.00                 TO WS-APP-CARD-MONTHLY-LIMIT
+           MOVE 'Jane Smith / Global'    TO WS-APP-CARD-EMBOSS-NAME
            PERFORM 9100-WRITE-APP
 
       *    APP 2 SIGNATORY
@@ -267,6 +279,12 @@
            MOVE SPACES                     TO WS-APP-ACCOUNT-NUMBER
            MOVE 'BR0003'                   TO WS-APP-BRANCH-CODE
            MOVE SPACES                     TO WS-APP-REJECTION-REASON
+           MOVE 'N'                        TO WS-APP-CARD-REQUESTED
+           MOVE 'DC'                       TO WS-APP-CARD-TYPE
+           MOVE ZEROS                      TO WS-APP-CARD-DAILY-LIMIT
+           MOVE ZEROS                      TO WS-APP-CARD-ATM-LIMIT
+           MOVE ZEROS                      TO WS-APP-CARD-MONTHLY-LIMIT
+           MOVE SPACES                     TO WS-APP-CARD-EMBOSS-NAME
            PERFORM 9100-WRITE-APP
 
            CLOSE BACSIG-FILE

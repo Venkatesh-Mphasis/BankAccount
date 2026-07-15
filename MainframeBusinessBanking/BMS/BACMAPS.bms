@@ -523,6 +523,18 @@ RVDOCREC DFHMDF POS=(10,16),LENGTH=1,                                    X
                ATTRB=(PROT)
          DFHMDF POS=(10,18),LENGTH=1,ATTRB=(ASKIP)
 *
+         DFHMDF POS=(11,1),LENGTH=16,                                   X
+               ATTRB=(ASKIP),                                          X
+               INITIAL='CARD REQUESTED: '
+RVCRDREQ DFHMDF POS=(11,18),LENGTH=1,                                    X
+               ATTRB=(PROT)
+         DFHMDF POS=(11,20),LENGTH=12,                                  X
+               ATTRB=(ASKIP),                                          X
+               INITIAL=' TYPE/LIMIT '
+RVCRDTL  DFHMDF POS=(11,33),LENGTH=25,                                   X
+               ATTRB=(PROT)
+         DFHMDF POS=(11,59),LENGTH=1,ATTRB=(ASKIP)
+*
          DFHMDF POS=(12,1),LENGTH=30,                                  X
                ATTRB=(ASKIP,BRT),                                      X
                INITIAL='SUBMIT APPLICATION? (Y/N):'
