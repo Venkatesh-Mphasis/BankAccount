@@ -38,4 +38,6 @@
            05  WS-CARD-CHECKER-ID         PIC X(08).
            05  WS-CARD-CREATED-TIMESTAMP  PIC X(26).
            05  WS-CARD-UPDATED-TIMESTAMP  PIC X(26).
-           05  FILLER                     PIC X(50).
+           05  WS-CARD-NETWORK            PIC X(06).
+           05  WS-CARD-PRODUCT            PIC X(10).
+           05  FILLER                     PIC X(34).

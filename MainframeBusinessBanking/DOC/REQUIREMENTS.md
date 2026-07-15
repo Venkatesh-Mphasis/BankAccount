@@ -37,7 +37,7 @@ It covers all of the real-world controls found in production banking systems:
 * Expected monthly transaction volume and amount
 * Source of funds
 * Initial deposit amount
-* Optional debit card request, card type, daily/ATM/monthly limits, and emboss name
+* Optional debit card request, card type, card network/product, daily/ATM/monthly limits, and emboss name
 
 ### 2.4 Authorized Signatories and Beneficial Owners
 * Name, title, date of birth, SSN / national ID
@@ -62,7 +62,7 @@ It covers all of the real-world controls found in production banking systems:
 * Approved applications are processed by a nightly batch
 * Customer master and account master records are created
 * Account number generation with branch, product, sequence, and check digit
-* Linked debit / prepaid card generated with 16-digit PAN, check digit, expiry, limits, and plastic lifecycle when requested
+* Linked debit / prepaid card generated with 16-digit PAN, check digit, expiry, limits, card network/product, and plastic lifecycle when requested
 * Application status updated to Opened
 
 ## 3. Technical Requirements

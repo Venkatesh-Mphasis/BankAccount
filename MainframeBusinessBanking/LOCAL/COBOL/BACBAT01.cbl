@@ -149,6 +149,8 @@
            05  FILLER                   PIC X(03) VALUE SPACES.
            05  CRPT-PLASTIC             PIC X(02).
            05  FILLER                   PIC X(03) VALUE SPACES.
+           05  CRPT-PRODUCT             PIC X(10).
+           05  FILLER                   PIC X(03) VALUE SPACES.
            05  CRPT-DAILY-LIMIT         PIC ZZZ,ZZZ,ZZ9.99.
            05  FILLER                   PIC X(03) VALUE SPACES.
            05  CRPT-EMBOSS-NAME         PIC X(30).
@@ -170,7 +172,7 @@
 
            WRITE BACRPT-REC FROM WS-HEADER-LINE
            STRING ' APP-ID     ACCT-NUM     CARD-ID    '
-                  'CARD-NUMBER       ST PL DAILY-LIMIT  '
+                  'CARD-NUMBER       ST PL PRODUCT    DAILY-LIMIT  '
                   'EMBOSS-NAME'
                DELIMITED BY SIZE
                INTO WS-CARD-HEADER-LINE
@@ -426,6 +428,8 @@
            MOVE 'M'                     TO WS-CARD-PIN-STATUS
            MOVE 'I'                     TO WS-CARD-ACTIVATION-STATUS
            MOVE 'PD'                    TO WS-CARD-DISPATCH-STATUS
+           MOVE 'VISA'                  TO WS-CARD-NETWORK
+           MOVE 'RUBY'                  TO WS-CARD-PRODUCT
            MOVE 'BATCH01'               TO WS-CARD-MAKER-ID
            MOVE 'BATCH01'               TO WS-CARD-CHECKER-ID
            MOVE WS-LFTS                 TO WS-CARD-CREATED-TIMESTAMP
@@ -444,6 +448,7 @@
            MOVE WS-CARD-NUMBER          TO CRPT-CARD-NUMBER
            MOVE WS-CARD-STATUS          TO CRPT-STATUS
            MOVE WS-CARD-PLASTIC-STATUS  TO CRPT-PLASTIC
+           MOVE WS-CARD-PRODUCT         TO CRPT-PRODUCT
            MOVE WS-CARD-DAILY-LIMIT     TO CRPT-DAILY-LIMIT
            MOVE WS-CARD-EMBOSS-NAME     TO CRPT-EMBOSS-NAME
            WRITE BACCARD-RPT-REC FROM WS-CARD-RPT-LINE

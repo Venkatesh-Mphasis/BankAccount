@@ -113,8 +113,8 @@ INQUIRY APP: APP0000001 STATUS: SB ACCT TYPE: CH DEPOSIT: 50,000.00
   APP0000001   CUST000001   000101000016   Acme Manufacturing LLC           CH       50,000.00  OP
 
 --- DEBIT CARD ISSUE REPORT ---
- APP-ID     ACCT-NUM     CARD-ID    CARD-NUMBER       ST PL DAILY-LIMIT  EMBOSS-NAME
-  APP0000001   000101000016   CARD001      4000000001010018   IS   EM         2,500.00   John Doe / Acme Mfg
+ APP-ID     ACCT-NUM     CARD-ID    CARD-NUMBER       ST PL PRODUCT    DAILY-LIMIT  EMBOSS-NAME
+  APP0000001   000101000016   CARD001      4000000001010018   IS   EM   RUBY               2,500.00   John Doe / Acme Mfg
 ```
 
 ## Real-World Banking Requirements Covered
@@ -129,7 +129,7 @@ See `DOC/REQUIREMENTS.md` for the full list. Highlights include:
 * Maker-checker workflow
 * Audit trail
 * Account number generation with check digit
-* Debit card request, 16-digit PAN generation with check digit, and plastic/issuance lifecycle
+* Debit card request, 16-digit PAN generation with check digit, plastic/issuance lifecycle, and card network/product fields
 
 ## Build / Deploy on Mainframe
 

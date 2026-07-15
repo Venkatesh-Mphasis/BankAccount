@@ -7,6 +7,8 @@
 SELECT C.CARD_ID,
        C.CARD_NUMBER,
        C.CARD_TYPE,
+       C.CARD_NETWORK,
+       C.CARD_PRODUCT,
        C.CARD_STATUS,
        C.PLASTIC_STATUS,
        C.EMBOSS_NAME,
